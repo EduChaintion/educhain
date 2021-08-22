@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>EduChaintion</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>
+    <script src="https://code.iconify.design/2/2.0.3/iconify.min.js"></script>
+
+    <script src="main.js" type="module"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+
+    <style>
+        .option {
+            border-bottom: 1px solid gray;
+            margin: 2em 0px;
+            padding: 2em 2em;
+        }
+        
+        .font-weight-bold { font-weight: 700; }
+
+        label {
+            margin-bottom: 5px;
+            font-weight: 500;
+        }
+        .text-bold { font-weight: 700; }
+        .custom-card {
+            border: 0;
+            margin: 10px;
+            border-radius: 15px;
+            padding: 15px;
+            overflow-wrap: break-word;
+        }
+
+        .custom-card-title { font-weight: 700; }
+
+        .bg-light { background-color: rgb(243, 244, 246); }
+        .color-secondary { color: #58667e; }
+
+        .btn-custom { 
+            border-radius: 5px;
+            border: 1px solid blue;
+         }
+        .fw-500 { font-weight: 500; }
+
+        .card-title { margin: 0 15px; }
+        .border-bottom-card { border-bottom: 1px solid #cfd6e4; margin: 0 15px; padding-bottom: 10px; }
+
+        .center-wrapper {
+            width: 100%;
+            height: 100vh;
+            position: relative; 
+        }
+        .center { 
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%); 
+        }
+
+        .ptb-25 { 
+           padding-top: 50px;
+           padding-bottom: 50px; 
+        }
+
+        .vh-100 {
+            height: 100vh;
+        }
+
+        .social-icon {
+            margin: 10px;
+        }
+        .navbar {
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav class="navbar fixed-top navbar-light bg-light">
+        <div class="container-fluid">
+            <a class="navbar-brand w-100" href="#">            
+                <img src="content/logo.png" class="img-fluid" width="35" height="35" alt="" />
+                <b>EduChaintion</b> (Proof of Concept)
+            </a>
+        </div>
+    </nav>
+
+    <div id="app">
+        <section class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="mb-4">
+                        <div class="center-wrapper">
+                            <div class="center">
+                                <h3>Degree, Certification, Awards that have value.</h3>
+                                EduCoin is a NFT platform to digitalize university degrees,
+                                government awards certification and many more!
+                                (Proof of concept)
+                                <div>
+                                    <div class="row mb-3 mt-3">
+                                        <div class="text-bold col-md-6">
+                                            Ethereum Price:
+                                        </div>
+                                        <div class="col-md-6">
+                                            {{ eth_price }}
+                                        </div>
+                                        <div class="text-bold col-md-6">
+                                            ERC 721 Token:
+                                        </div>
+                                        <div class="col-md-6">
+                                            {{ nft_description.symbol }}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <template v-if="!enabledMM">
+                                        <div>Login using your Ethereum Ropsten Private Key</div>
+                                        <input v-model="account_private_key" type="text" class="form-control" maxlength="120"/>
+                                        <a href="#explore">
+                                            <button v-on:click="onImportAccount" type="button" class="btn-custom btn-white btn text-bold">Request an NFT from institution</button>
+                                        </a>
+                                    </template>
+                                    <template>
+                                        Logged in with <b>Metamask</b>. For development purposes, you may be required to use private key instead.
+                                    </template>
+                                </div>
+                            </div>
+                        </div> 
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="center-wrapper">
+                        <div class="center">
+                            <img src="content/logo.png" class="img-fluid" alt="" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <div class="container ptb-25">
+                <div class="mb-4">
+                    <h2>How it works</h2>
+                    <div class="">
+                        EduChaintion compiles to the ERC 721 standard of Ethereum token. Since this is not the real implementation,
+                        it runs on <b>Ropsten</b> Testnet and is requires a <b>MetaMask</b> account. For development purposes, you can use a 
+                        private key to connect via web3.
+
+                        <h4 class="mb-2">EduChaintion NFT</h4>
+                        EduChaintion in form of ERC 721 are NFTs. They can be minted, burned and transfered. Minted EduChaintion NFTs, are on chain asset
+                        that represents a <i>graduate's</i> academic achievements. Ranging from,
+                        <ul>
+                            <li>University Degree</li>
+                            <li>Digital Certification</li>
+                            <li>Badges and Awards</li>
+                        </ul>
+                        the value of these NFTs comes from it of academic equivalent, meaning each minted NFT should have similar values to the pursued 
+                        degree or training cost.
+
+                        <h4 class="mb-2">Actors</h4>
+                        <b>Academic Institution</b>
+                        These are verified institutions, that will have the ability to generate NFT. They can be universities, colleges, government training
+                        and online courses. The decision for institutions to also have the ability to burn these NFTs if misconduct occurs.
+
+                        <br>
+
+                        <b>Graduate</b>
+                        Graduates are the users that have been issued a EduChaintion NFT. They have the ability to view and showcase their 
+                        qualifications, with proof of the NFTs.
+                    </div>
+
+                    <h2>Information about EduChaintion</h2>
+                    <div class="text-secondary">
+                        Lanaguage: Solidity
+                        Project Start			    20/08/22
+                        Development to testnet	 	22/08/22
+                        If you want to contribute, email me at EduChaintion@outlook.com and we'll add you to the github repo.
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="explore" class="center-wrapper bg-light">
+            <div class="center container ptb-25">
+                <div class="text-center mb-4">
+                    <h2>Create a Certification NFT here</h2>
+                    <div class="text-secondary">Create NFTs Degrees for grudates</div>
+                </div>
+                <div>
+                    Now imagine you just completed a university degree, or an online course. The verified institution
+                    will have the previlige of creating a NFT for you. They will need to fill some information regarding
+                    your certification. You can pretend you just finished a course, by clicking on the <i>Generate Random Data</i>.
+                    Once everything is filled, request for your NFT to be minted!
+                </div>
+                <div class="row mt-5">
+                    <div class="col-md-6">
+                        <div class="text-bold">Image (URL)</div>
+                        <input v-model="createNftParams.image" type="text" class="form-control" maxlength="120"/>
+
+                        <div class="text-bold">Graduate *</div>
+                        <input v-model="createNftParams.graduate" type="text" class="form-control" maxlength="120"/>
+
+                        <div class="text-bold">Description *</div>
+                        <div>{{ createNftParams.description.length }} / 120 </div>
+                        <input v-model="createNftParams.description" type="text" class="form-control" maxlength="120"/>
+
+                        <div class="text-bold">Certification Title *</div>
+                        <input v-model="createNftParams.certification_title" type="text" class="form-control" maxlength="120"/>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="text-center">
+                            <button v-on:click="generateNFT" type="button" class="btn-custom btn-primary btn text-bold">Generate Random Data</button>
+                            <button v-on:click="createNFT" type="button" class="btn-custom btn-white btn text-bold">Request NFT</button>
+                            <button type="button" class="btn-custom btn-primary btn text-bold"><a class="text-white" href="#verify">Become a Institution</a></button>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+        </section>
+
+        <section class="ptb-25">
+            <div class="text-center">
+                <h2>Are you a Student?</h2>
+            </div>
+            <template v-if="isUserRegistered">
+                <div class="text-center">
+                    <div class="text-secondary">View your NFTs here.</div>
+                </div>
+
+                <div class="container">
+                    <div class="row ptb-25">
+                        <div class="col-md-4">
+                            <div class="card m-2 p-4">
+                                <b class="mb-3">Token No. 0</b>
+
+                                <img class="img-fluid" src="content/logo.png" alt="NFT Degree Image">
+                                <h2>0x0000000000000000000000000000000000000000 (Graduate) has been awarded Masters of Blockchain</h2>
+                                on Sun Aug 22 2021 11:41:59 from 0x0000000000000000000000000000000000000000 (Institution)
+
+                                <div class="mt-4 mb-4">
+                                    This is what a NFT Degree would be like. With relevance information about the course, subject, 
+                                    who and when the certification was minted.
+                                </div>
+                            </div>
+                        </div>
+                        <div v-for="nft in yourNFTs" class="col-md-4">
+                            <div class="card m-2 p-4">
+                                <b class="mb-3">Token No. {{ nft.tokenId }}</b>
+
+                                <div v-if="nft.image">
+                                    <img class="img-fluid" v-bind:src="nft.image" alt="NFT Degree Image">
+                                </div>
+                                <div v-else>
+                                    No image was uploaded to this NFT
+                                </div>
+                                <h2>{{ account_info.address }} has been awarded {{ nft.certification_title }}</h2>
+                                on {{ new Date(nft.date) }} from {{ nft.institution }}
+
+                                {{ nft.description }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            
+            </template>
+            <template v-else>
+                <div class="text-center">
+                    <div class="text-secondary">Login to see your NFT degree!</div>
+                </div>
+
+                <input v-model="account_private_key" type="text" class="form-control" maxlength="120"/>
+                <button v-on:click="onImportAccount" type="button" class="btn-custom btn-primary btn text-bold">Login</button> 
+            </template>
+        </section>
+
+        <section id="verifyInstitutionParams" class="center-wrapper bg-light text-center">
+            <div class="center container ptb-25">                
+                <h2>Are you an institution?</h2>
+                <div class="text-secondary">Become a verified academic institution to give valuable NFTs to your students</div>
+  
+                <template v-if="!isUserRegistered">
+                    <div class="text-bold">Private Key to login</div>
+                    <input v-model="account_private_key" type="text" class="form-control" maxlength="120"/>
+                    <button v-on:click="onImportAccount" type="button" class="btn-custom btn-primary btn text-bold">Login</button>
+                </template >
+                <template v-else>
+                    <div class="text-bold">Institution Name *</div>
+                    <input v-model="verifyInstitutionParams.name" type="text" class="form-control" maxlength="120"/>
+                    <button v-on:click="verifyInstitution" type="button" class="btn-custom btn-primary btn text-bold">Apply Here</button>
+                </template >
+            </div>
+        </section>
+
+        <footer class="bg-dark text-white">
+            <div class="container ptb-25">
+                <div class="row">
+                    <div class="col-md-6 p-3">
+                        <h3 class="mb-3">Question?</h3>
+                        <div class="mb-3">
+                        Want to know more about EduChaintion? What to give feedback? Send us your email,
+                        and we'll reply as soon as possible or email us here: {{ email }}
+                        </div>
+                        <div class="row">
+                            <div class="col-md-8">
+                                <input type="mail" class="form-control mb-3" maxlength="120" placeholder="Your email address" />
+                            </div>
+                            <div class="col-md-4">
+                                <button v-on:click="emailForEnquiry" type="button" class="btn-custom btn-primary btn text-bold">Send</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 p-3">
+                        <h3 class="mb-3">Join the community</h3>
+                        <div>(Note until this become a legit thing, there won't be social yet)</div>
+                        <span v-for="social in socials" class="iconify-inline social-icon" :data-icon="social.icon" data-width="32"></span>
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+</body>
+
+</html>
