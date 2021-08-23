@@ -35,11 +35,12 @@
         .custom-card-title { font-weight: 700; }
 
         .bg-light { background-color: rgb(243, 244, 246); }
+        .text-primary { color: #2a71d0; }
         .color-secondary { color: #58667e; }
 
         .btn-custom { 
             border-radius: 5px;
-            border: 1px solid blue;
+            border: 1px solid #2a71d0;
          }
         .fw-500 { font-weight: 500; }
 
@@ -57,21 +58,22 @@
             transform: translate(-50%, -50%); 
         }
 
+        .step {
+            border: 1px solid #2a71d0;
+            padding: 10px 15px;
+            background-color: #2a71d0;
+            border-radius: 25px;
+            color: white;
+        }
+
         .ptb-25 { 
            padding-top: 50px;
            padding-bottom: 50px; 
         }
 
-        .vh-100 {
-            height: 100vh;
-        }
-
-        .social-icon {
-            margin: 10px;
-        }
-        .navbar {
-            text-align: center;
-        }
+        .vh-100 { height: 100vh; }
+        .social-icon { margin: 10px; }
+        .navbar { text-align: center; }
     </style>
 </head>
 
@@ -142,8 +144,31 @@
         <section>
             <div class="container ptb-25">
                 <div class="mb-4">
-                    <h2>How it works</h2>
-                    <div class="">
+                    <h2 class="ptb-25 text-center">Feature</h2>
+                    <div class="row">
+                        <div v-for="feature in features" class="col-md-3">
+                            <div class="w-100 text-center">
+                                <span class="iconify-inline text-primary mb-4" :data-icon="feature.icon" data-width="64"></span>
+                                <div class="">
+                                    <h4>{{ feature.title }}</h4>
+                                    {{ feature.text }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <h2 class="ptb-25 text-center">How it works</h2>
+                    <div class="row container">
+                        <div v-for="step in steps" class="col-md-4">
+                            <div class="row">
+                                <div class="col-md-4 text-center text-bold"><span class="step">{{ step.step }}</span></div>
+                                <div class="col-md-8">{{ step.text }}</div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <!-- <div class="">
                         EduChaintion compiles to the ERC 721 standard of Ethereum token. Since this is not the real implementation,
                         it runs on <b>Ropsten</b> Testnet and is requires a <b>MetaMask</b> account. For development purposes, you can use a 
                         private key to connect via web3.
@@ -178,7 +203,7 @@
                         Development to testnet	 	22/08/22
                         If you want to contribute, email me at EduChaintion@outlook.com and we'll add you to the github repo.
                     </div>
-                </div>
+                </div> -->
             </div>
         </section>
 
@@ -276,7 +301,7 @@
             </template>
         </section>
 
-        <section id="verifyInstitutionParams" class="center-wrapper bg-light text-center">
+        <section id="verify" class="center-wrapper bg-light text-center">
             <div class="center container ptb-25">                
                 <h2>Are you an institution?</h2>
                 <div class="text-secondary">Become a verified academic institution to give valuable NFTs to your students</div>

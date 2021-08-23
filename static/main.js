@@ -47,6 +47,17 @@ var app = new Vue({
             { placeholder: "linkein", icon: "akar-icons:linkedin-fill", link: "#" },
             { placeholder: "blog", icon: "fa-solid:blog", link: "#" }
         ],
+        features: [
+            { icon: "eos-icons:blockchain", title: "Decentralisation", text: "Open, Free for everyone with a valid Ethereum address. How blockchain should be built for" },
+            { icon: "fluent:certificate-20-regular", title: "NFT certification", text: "Legititize your degree and qualification with valuable NFTs stored secure and immutable on Ethereum" },
+            { icon: "la:wallet", title: "Secure Wallet Setup", text: "Connect to Metamask to secure transactions and NFTs" },
+            { icon: "ri:coin-line", title: "Simple and Inexpensive", text: "Reduce processing time, complexity and save on fees and other cost" },
+        ],
+        steps: [
+            { step: 1, text: "Finish a course on EduChaintion, online, or in person" },
+            { step: 2, text: "The respected academic institution will have the ability to mint a NFT if qualified" },
+            { step: 3, text: "NFT is sent to you to keep and accessible through API or our App" },
+        ],
         account_info: null,
         account_private_key: '',
 
