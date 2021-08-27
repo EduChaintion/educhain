@@ -1,3 +1,4 @@
+let hasMetaMask = false;
 function loadMetaMask() {
     let hasMetaMask = false;
     if (window.ethereum) {
@@ -11,7 +12,7 @@ function loadMetaMask() {
 
 const ret = loadMetaMask();
 const web3 = ret[0];
-const hasMetaMask = ret[1];
+hasMetaMask = ret[1];
 
 let contract_instance;
 if(hasMetaMask) {
@@ -29,7 +30,11 @@ var app = new Vue({
         isUserLogged: false,
         account_info: null,
         account_private_key: '',
-        hasMetaMask: hasMetaMask,
+        hasMetaMask: false,
+
+        primaryColor: '#2a71d0',
+        ethPrice: 0,
+        nftInfo: { name: "", symbol: "" },
 
         // EduChaintion Info
         email: "EduChaintion@outlook.com",
@@ -61,9 +66,6 @@ var app = new Vue({
         yourNFTs: [],
         statusMsg: "",
 
-        nftInfo: { name: "", symbol: "" },
-        ethPrice: 0,
-
         proofOfConceptData: {
             level: ["Bachelor", "Master", "Doctoral", "Diploma", "Certification"],
             subject: ["Engineering", "Art & Design", "Medicine & Health", "Business", "Science", "Computer Science", "Commerce", "Law"],
@@ -75,11 +77,15 @@ var app = new Vue({
     },
     methods: {
         onload: async function () {
-            if (this.hasMetaMask) {
+            if (hasMetaMask) {
+                this.hasMetaMask = hasMetaMask;
                 await this.loadMetaMaskAccount();
                 // console.log(`User Account: ${this.account_info}`);
                 this.isUserLogged = true;
             }
+            // if(this.account_private_key) { this.onImportAccount(); }
+            // this.nftInfo.name = await contract_instance.methods.name().call();
+            // this.nftInfo.symbol = await contract_instance.methods.symbol().call();
 
             await this.loadEthereumPrice();
             await this.loadUserCertification();
@@ -88,10 +94,6 @@ var app = new Vue({
             this.account_info = importAccount(this.account_private_key);
             this.isUserLogged = true;
             console.log("Login Success!");
-        },
-        onCreateAccount: function () {
-            createAccount();
-            // this.account_info = account_info.address;
         },
         createNFT: async function () {
             if(!web3.utils.isAddress(this.createNftParams.graduate)) { this.statusMsg = "Invalid Address"; return; }
@@ -130,11 +132,9 @@ var app = new Vue({
             console.log("Sending Email");
         },
         loadMetaMaskAccount: async function () {
-            window.ethereum.request({ method: 'eth_requestAccounts' })
-            .then((accounts) => {
-                this.account_info = { address: accounts[0] };
-                this.isUserRegistered = true;
-            });
+            const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+            this.account_info = { address: accounts[0] }
+            this.isUserLogged = true;
         },
         loadUserCertification: async function() {
             let ret = await methodSend(web3, this.account_info, contract_instance, 'call', 'getAllCertification', []);
